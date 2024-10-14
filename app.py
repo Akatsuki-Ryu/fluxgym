@@ -922,12 +922,12 @@ with gr.Blocks(elem_id="app", theme=theme, css=css, fill_width=True) as demo:
                     model_names = list(models.keys())
                     print(f"model_names={model_names}")
                     base_model = gr.Dropdown(label="Base model (edit the models.yaml file to add more to this list)", choices=model_names, value=model_names[0])
-                    vram = gr.Radio(["20G", "16G", "12G" ], value="20G", label="VRAM", interactive=True)
+                    vram = gr.Radio(["20G", "16G", "12G" ], value="12G", label="VRAM", interactive=True)
                     num_repeats = gr.Number(value=10, precision=0, label="Repeat trains per image", interactive=True)
                     max_train_epochs = gr.Number(label="Max Train Epochs", value=16, interactive=True)
                     total_steps = gr.Number(0, interactive=False, label="Expected training steps")
                     sample_prompts = gr.Textbox("", lines=5, label="Sample Image Prompts (Separate with new lines)", interactive=True)
-                    sample_every_n_steps = gr.Number(0, precision=0, label="Sample Image Every N Steps", interactive=True)
+                    sample_every_n_steps = gr.Number(100, precision=0, label="Sample Image Every N Steps", interactive=True)
                     resolution = gr.Number(value=512, precision=0, label="Resize dataset images")
                 with gr.Column():
                     gr.Markdown(
@@ -986,11 +986,11 @@ with gr.Blocks(elem_id="app", theme=theme, css=css, fill_width=True) as demo:
                     with gr.Column(min_width=300):
                         seed = gr.Number(label="--seed", info="Seed", value=42, interactive=True)
                     with gr.Column(min_width=300):
-                        workers = gr.Number(label="--max_data_loader_n_workers", info="Number of Workers", value=2, interactive=True)
+                        workers = gr.Number(label="--max_data_loader_n_workers", info="Number of Workers", value=8, interactive=True)
                     with gr.Column(min_width=300):
                         learning_rate = gr.Textbox(label="--learning_rate", info="Learning Rate", value="8e-4", interactive=True)
                     with gr.Column(min_width=300):
-                        save_every_n_epochs = gr.Number(label="--save_every_n_epochs", info="Save every N epochs", value=4, interactive=True)
+                        save_every_n_epochs = gr.Number(label="--save_every_n_epochs", info="Save every N epochs", value=1, interactive=True)
                     with gr.Column(min_width=300):
                         guidance_scale = gr.Number(label="--guidance_scale", info="Guidance Scale", value=1.0, interactive=True)
                     with gr.Column(min_width=300):
