@@ -1,6 +1,12 @@
 @echo off
 setlocal enabledelayedexpansion
 
+# Start Generation Here
+set "root_directory=%CD%"
+echo Root directory saved: %root_directory%
+# End Generation Here
+
+
 :list_folders
 echo Available folders in the output directory:
 set /a count=0
@@ -26,6 +32,12 @@ echo You selected: %chosen_folder%
 
 cd "outputs\%chosen_folder%"
 echo Current directory: %CD%
+
+# Start Generation Here
+set "training_directory=%CD%"
+echo Training directory saved: %training_directory%
+# End Generation Here
+
 
 :find_latest_state
 set "latest_state="
@@ -55,6 +67,8 @@ if defined latest_state (
 :create_trainresume
 if exist train.bat (
     copy train.bat trainresume.bat
+    type trainresume.bat | findstr /v /c:"--save_state_on_train_end" > temp.bat
+    move /y temp.bat trainresume.bat
     echo --save_state_on_train_end ^^>> trainresume.bat
     echo --resume "%latest_state%" >> trainresume.bat
     echo Created trainresume.bat with resume command for %latest_state%
@@ -65,6 +79,35 @@ if exist train.bat (
 
 echo.
 echo Ready for the next steps. What would you like to do now?
+echo.
+
+
+echo Activating Python environment...
+
+cd "%root_directory%"
+cd env\Scripts
+call activate
+
+if %ERRORLEVEL% neq 0 (
+    echo Failed to activate Python environment. Please ensure it's set up correctly.
+    goto :eof
+)
+echo Python environment activated successfully.
+echo.
+
+
+
+echo Do you want to run trainresume.bat now? (Y/N)
+set /p run_choice=
+
+if /i "%run_choice%"=="Y" (
+    echo Running trainresume.bat...
+    cd "%root_directory%"
+    call "%training_directory%\trainresume.bat"
+) else (
+    echo Skipping execution of trainresume.bat.
+)
+
 
 goto :eof
 
